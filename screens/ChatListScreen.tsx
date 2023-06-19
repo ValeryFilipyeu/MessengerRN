@@ -14,9 +14,9 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({ navigation }) => {
       <Text>Chat List Screen</Text>
 
       <Button
-        title="Go to Settings"
+        title="Go to Chat Screen"
         onPress={() => {
-          navigation.navigate("ChatSettings");
+          navigation.navigate("ChatScreen");
         }}
       />
     </View>
