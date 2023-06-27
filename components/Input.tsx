@@ -7,11 +7,20 @@ import { colors } from "../constants/colors";
 interface InputProps {
   label: string;
   icon: "user" | "mail" | "lock";
+  id: string;
+  onInputChanged: (id: string, text: string) => void;
+  autoCapitalize?: "none";
+  keyboardType?: "email-address";
   iconSize?: number;
-  errorText?: string;
+  secureTextEntry?: boolean;
+  errorText?: [string];
 }
 
 const Input: React.FC<InputProps> = (props) => {
+  const onChangeText = (text: string) => {
+    props.onInputChanged(props.id, text);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{props.label}</Text>
@@ -24,12 +33,16 @@ const Input: React.FC<InputProps> = (props) => {
             style={styles.icon}
           />
         )}
-        <TextInput style={styles.input} />
+        <TextInput
+          {...props}
+          style={styles.input}
+          onChangeText={onChangeText}
+        />
       </View>
 
       {props.errorText && (
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{props.errorText}</Text>
+          <Text style={styles.errorText}>{props.errorText[0]}</Text>
         </View>
       )}
     </View>
