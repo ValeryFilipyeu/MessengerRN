@@ -1,12 +1,22 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
+import { ActivityIndicator, Alert } from "react-native";
+import { useDispatch } from "react-redux";
+
 import Input from "../components/Input";
 import SubmitButton from "../components/SubmitButton";
-
 import { validateInput } from "../utils/actions/formActions";
 import { reducer } from "../utils/reducers/formReducers";
+import { signUp } from "../utils/actions/authActions";
 import { State } from "../types";
+import { colors } from "../constants/colors";
 
 const initialState: State = {
+  inputValues: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  },
   inputValidities: {
     firstName: false,
     lastName: false,
@@ -17,15 +27,43 @@ const initialState: State = {
 };
 
 const SignUpForm: React.FC<unknown> = () => {
+  const [error, setError] = useState<null | string>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [formState, dispatchFormState] = useReducer(reducer, initialState);
+  const dispatch = useDispatch();
 
   const inputChangedHandler = useCallback(
     (inputId: string, inputValue: string) => {
       const result = validateInput(inputId, inputValue);
-      dispatchFormState({ inputId, validationResult: result });
+      dispatchFormState({ inputId, validationResult: result, inputValue });
     },
     [dispatchFormState]
   );
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An error occured", error, [{ text: "Okay" }]);
+    }
+  }, [error]);
+
+  const authHandler = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const action = signUp(
+        formState.inputValues.firstName,
+        formState.inputValues.lastName,
+        formState.inputValues.email,
+        formState.inputValues.password
+      );
+      setError(null);
+      // @ts-ignore
+      await dispatch(action);
+    } catch (error) {
+      setError((error as Error).message);
+      setIsLoading(false);
+    }
+  }, [dispatch, formState]);
 
   return (
     <>
@@ -64,12 +102,20 @@ const SignUpForm: React.FC<unknown> = () => {
         errorText={formState.inputValidities["password"] as [string]}
       />
 
-      <SubmitButton
-        title="Sign up"
-        onPress={() => console.log("Button pressed")}
-        style={{ marginTop: 20 }}
-        disabled={!formState.formIsValid}
-      />
+      {isLoading ? (
+        <ActivityIndicator
+          size={"small"}
+          color={colors.pink}
+          style={{ marginTop: 10 }}
+        />
+      ) : (
+        <SubmitButton
+          title="Sign up"
+          onPress={authHandler}
+          style={{ marginTop: 20 }}
+          disabled={!formState.formIsValid}
+        />
+      )}
     </>
   );
 };
