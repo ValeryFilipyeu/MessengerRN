@@ -10,18 +10,30 @@ import { State } from "../types";
 import { signIn } from "../utils/actions/authActions";
 import { colors } from "../constants/colors";
 
-const isTestMode = true;
+// const isTestMode = true;
+
+// const initialState: State = {
+//   inputValues: {
+//     email: isTestMode ? "valeranuzhdin1998@mail.ru" : "",
+//     password: isTestMode ? "password" : "",
+//   },
+//   inputValidities: {
+//     email: isTestMode,
+//     password: isTestMode,
+//   },
+//   formIsValid: isTestMode
+// };
 
 const initialState: State = {
   inputValues: {
-    email: isTestMode ? "valeranuzhdin1998@mail.ru" : "",
-    password: isTestMode ? "password" : "",
+    email: "",
+    password: "",
   },
   inputValidities: {
-    email: isTestMode,
-    password: isTestMode,
+    email: false,
+    password: false,
   },
-  formIsValid: isTestMode
+  formIsValid: false,
 };
 
 const SignInForm: React.FC<unknown> = () => {
@@ -33,7 +45,7 @@ const SignInForm: React.FC<unknown> = () => {
   const inputChangedHandler = useCallback(
     (inputId: string, inputValue: string) => {
       const result = validateInput(inputId, inputValue);
-      dispatchFormState({ inputId, validationResult: result, inputValue })
+      dispatchFormState({ inputId, validationResult: result, inputValue });
     },
     [dispatchFormState]
   );

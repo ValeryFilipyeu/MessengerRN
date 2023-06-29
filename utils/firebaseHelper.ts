@@ -7,6 +7,7 @@ import {
   MESSAGING_SENDER_ID,
   APP_ID,
   MEASUREMENT_ID,
+  // @ts-ignore
 } from "@env";
 
 const apiKey = API_KEY;
