@@ -1,5 +1,41 @@
 import { validate } from "validate.js";
 
+interface ConstraintsLength {
+  presence: { allowEmpty: boolean };
+  length?: {
+    minimum?: number;
+    maximum?: number;
+  };
+}
+
+export const validateLength = (
+  id: string,
+  value: string,
+  minLength: number,
+  maxLength: number,
+  allowEmpty: boolean
+): undefined | [string] => {
+  const constraints: ConstraintsLength = {
+    presence: { allowEmpty },
+  };
+
+  if (!allowEmpty || value !== "") {
+    constraints.length = {};
+
+    if (minLength != null) {
+      constraints.length.minimum = minLength;
+    }
+
+    if (maxLength != null) {
+      constraints.length.maximum = maxLength;
+    }
+  }
+
+  const validationResult = validate({ [id]: value }, { [id]: constraints });
+
+  return validationResult && validationResult[id];
+};
+
 interface ConstraintsString {
   presence: { allowEmpty: boolean };
   format?: { pattern: string; flags: string; message: string };
@@ -48,7 +84,7 @@ export const validateEmail = (
   return validationResult && validationResult[id];
 };
 
-interface ConstraintsEmail {
+interface ConstraintsPassword {
   presence: { allowEmpty: boolean };
   length?: {
     minimum: number;
@@ -60,7 +96,7 @@ export const validatePassword = (
   id: string,
   value: string
 ): undefined | [string] => {
-  const constraints: ConstraintsEmail = {
+  const constraints: ConstraintsPassword = {
     presence: { allowEmpty: false },
   };
 

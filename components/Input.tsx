@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { colors } from "../constants/colors";
 
 interface InputProps {
+  initialValue?: string;
   label: string;
   icon: "user" | "mail" | "lock";
   id: string;
@@ -17,7 +18,9 @@ interface InputProps {
 }
 
 const Input: React.FC<InputProps> = (props) => {
+  const [value, setValue] = useState(props.initialValue);
   const onChangeText = (text: string) => {
+    setValue(text);
     props.onInputChanged(props.id, text);
   };
 
@@ -37,6 +40,7 @@ const Input: React.FC<InputProps> = (props) => {
           {...props}
           style={styles.input}
           onChangeText={onChangeText}
+          value={value}
         />
       </View>
 

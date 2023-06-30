@@ -82,6 +82,7 @@ const SignInForm: React.FC<unknown> = () => {
         autoCapitalize="none"
         keyboardType="email-address"
         onInputChanged={inputChangedHandler}
+        initialValue={formState.inputValues.email}
         errorText={formState.inputValidities["email"] as [string]}
       />
       <Input
@@ -91,6 +92,7 @@ const SignInForm: React.FC<unknown> = () => {
         autoCapitalize="none"
         secureTextEntry
         onInputChanged={inputChangedHandler}
+        initialValue={formState.inputValues.password}
         errorText={formState.inputValidities["password"] as [string]}
       />
 

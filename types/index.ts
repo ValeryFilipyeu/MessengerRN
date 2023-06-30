@@ -23,4 +23,6 @@ export interface UserData {
   email: string;
   userId: string;
   signUpDate: string;
+  about: string;
+  profilePicture: string;
 }
