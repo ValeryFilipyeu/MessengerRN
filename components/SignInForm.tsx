@@ -1,6 +1,7 @@
 import React, { useCallback, useReducer, useState, useEffect } from "react";
 import { ActivityIndicator, Alert } from "react-native";
 import { useDispatch } from "react-redux";
+import { AnyAction } from "@reduxjs/toolkit";
 
 import Input from "../components/Input";
 import SubmitButton from "../components/SubmitButton";
@@ -65,8 +66,7 @@ const SignInForm: React.FC<unknown> = () => {
         formState.inputValues.password
       );
       setError(null);
-      // @ts-ignore
-      await dispatch(action);
+      await dispatch(action as unknown as AnyAction);
     } catch (error) {
       setError((error as Error).message);
       setIsLoading(false);

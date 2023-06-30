@@ -5,8 +5,11 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { AnyAction } from "@reduxjs/toolkit";
 
 import Input from "../components/Input";
 import PageContainer from "../components/PageContainer";
@@ -67,15 +70,17 @@ const SettingsScreen: React.FC<unknown> = () => {
     const updatedValues = formState.inputValues;
 
     try {
-      setIsLoading(true);
-      await updateSignedInUserData(userData?.userId, updatedValues);
-      dispatch(updateLoggedInUserData({ newData: updatedValues }));
+      if (userData?.userId) {
+        setIsLoading(true);
+        await updateSignedInUserData(userData?.userId, updatedValues);
+        dispatch(updateLoggedInUserData({ newData: updatedValues }));
 
-      setShowSuccessMessage(true);
+        setShowSuccessMessage(true);
 
-      setTimeout(() => {
-        setShowSuccessMessage(false);
-      }, 3000);
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+        }, 3000);
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -100,85 +105,90 @@ const SettingsScreen: React.FC<unknown> = () => {
 
   return (
     <PageContainer>
-      <PageTitle text="Settings" />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={100}
+      >
+        <PageTitle text="Settings" />
 
-      <ScrollView contentContainerStyle={styles.formContainer}>
-        <ProfileImage
-          size={80}
-          userId={userData.userId}
-          uri={userData.profilePicture}
-        />
+        <ScrollView contentContainerStyle={styles.formContainer}>
+          <ProfileImage
+            size={80}
+            userId={userData.userId}
+            uri={userData.profilePicture}
+          />
 
-        <Input
-          id="firstName"
-          label="First name"
-          icon="user"
-          onInputChanged={inputChangedHandler}
-          autoCapitalize="none"
-          errorText={formState.inputValidities["firstName"] as [string]}
-          initialValue={userData.firstName}
-        />
+          <Input
+            id="firstName"
+            label="First name"
+            icon="user"
+            onInputChanged={inputChangedHandler}
+            autoCapitalize="none"
+            errorText={formState.inputValidities["firstName"] as [string]}
+            initialValue={userData.firstName}
+          />
 
-        <Input
-          id="lastName"
-          label="Last name"
-          icon="user"
-          onInputChanged={inputChangedHandler}
-          autoCapitalize="none"
-          errorText={formState.inputValidities["lastName"] as [string]}
-          initialValue={userData.lastName}
-        />
+          <Input
+            id="lastName"
+            label="Last name"
+            icon="user"
+            onInputChanged={inputChangedHandler}
+            autoCapitalize="none"
+            errorText={formState.inputValidities["lastName"] as [string]}
+            initialValue={userData.lastName}
+          />
 
-        <Input
-          id="email"
-          label="Email"
-          icon="mail"
-          onInputChanged={inputChangedHandler}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          errorText={formState.inputValidities["email"] as [string]}
-          initialValue={userData.email}
-        />
+          <Input
+            id="email"
+            label="Email"
+            icon="mail"
+            onInputChanged={inputChangedHandler}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            errorText={formState.inputValidities["email"] as [string]}
+            initialValue={userData.email}
+          />
 
-        <Input
-          id="about"
-          label="About"
-          icon="user"
-          onInputChanged={inputChangedHandler}
-          autoCapitalize="none"
-          errorText={formState.inputValidities["about"] as [string]}
-          initialValue={userData.about}
-        />
+          <Input
+            id="about"
+            label="About"
+            icon="user"
+            onInputChanged={inputChangedHandler}
+            autoCapitalize="none"
+            errorText={formState.inputValidities["about"] as [string]}
+            initialValue={userData.about}
+          />
 
-        <View style={{ marginTop: 20 }}>
-          {showSuccessMessage && <Text>Saved!</Text>}
+          <View style={{ marginTop: 20 }}>
+            {showSuccessMessage && <Text>Saved!</Text>}
 
-          {isLoading ? (
-            <ActivityIndicator
-              size={"small"}
-              color={colors.pink}
-              style={{ marginTop: 10 }}
-            />
-          ) : (
-            hasChanges() && (
-              <SubmitButton
-                title="Save"
-                onPress={saveHandler}
-                style={{ marginTop: 20 }}
-                disabled={!formState.formIsValid}
+            {isLoading ? (
+              <ActivityIndicator
+                size={"small"}
+                color={colors.pink}
+                style={{ marginTop: 10 }}
               />
-            )
-          )}
-        </View>
+            ) : (
+              hasChanges() && (
+                <SubmitButton
+                  title="Save"
+                  onPress={saveHandler}
+                  style={{ marginTop: 20 }}
+                  disabled={!formState.formIsValid}
+                />
+              )
+            )}
+          </View>
 
-        <SubmitButton
-          title="Logout"
-          // @ts-ignore
-          onPress={() => dispatch(userLogout())}
-          style={{ marginTop: 20 }}
-          color={colors.red}
-        />
-      </ScrollView>
+          <SubmitButton
+            title="Logout"
+            onPress={() => dispatch(userLogout() as unknown as AnyAction)}
+            style={{ marginTop: 20 }}
+            color={colors.red}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </PageContainer>
   );
 };

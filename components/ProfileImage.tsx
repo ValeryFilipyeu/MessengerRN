@@ -21,7 +21,7 @@ const userImage = require("../assets/images/userImage.jpeg");
 
 interface ProfileImageProps {
   userId: string;
-  uri: string;
+  uri: string | undefined;
   size: number;
 }
 
