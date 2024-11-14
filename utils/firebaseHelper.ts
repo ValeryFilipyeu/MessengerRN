@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import {
   API_KEY,
   AUTH_DOMAIN,
+  DATABASE_URL,
   PROJECT_ID,
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
@@ -12,6 +13,7 @@ import {
 
 const apiKey = API_KEY;
 const authDomain = AUTH_DOMAIN;
+const databaseURL = DATABASE_URL;
 const projectId = PROJECT_ID;
 const storageBucket = STORAGE_BUCKET;
 const messagingSenderId = MESSAGING_SENDER_ID;
@@ -27,6 +29,7 @@ export const getFirebaseApp = () => {
   const firebaseConfig = {
     apiKey,
     authDomain,
+    databaseURL,
     projectId,
     storageBucket,
     messagingSenderId,
