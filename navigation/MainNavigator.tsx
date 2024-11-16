@@ -1,10 +1,10 @@
 import React from "react";
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons, Feather } from '@expo/vector-icons';
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons, Feather } from "@expo/vector-icons";
 
-import ChatSettingsScreen from '../screens/ChatSettingsScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ChatSettingsScreen from "../screens/ChatSettingsScreen";
+import SettingsScreen from "../screens/SettingsScreen";
 import ChatListScreen from "../screens/ChatListScreen";
 import ChatScreen from "../screens/ChatScreen";
 
@@ -19,7 +19,7 @@ const TabNavigator: React.FC<unknown> = () => {
         component={ChatListScreen}
         options={{
           tabBarLabel: "Chats",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ color, size }: { size?: number; color?: string }) => (
             <Ionicons name="chatbubble-outline" size={size} color={color} />
           ),
         }}
@@ -29,14 +29,14 @@ const TabNavigator: React.FC<unknown> = () => {
         component={SettingsScreen}
         options={{
           tabBarLabel: "Settings",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ color, size }: { size?: number; color?: string }) => (
             <Feather name="settings" size={size} color={color} />
           ),
         }}
       />
     </Tab.Navigator>
-  )
-}
+  );
+};
 
 const MainNavigator: React.FC<unknown> = () => {
   return (
